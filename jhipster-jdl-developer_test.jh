@@ -1,0 +1,107 @@
+/**
+* Developers Test Diagram
+*/
+// a Candidate acount
+entity Candidate {
+  firstName String required
+  lastName String required
+  dateOfBirtch ZonedDateTime required
+  email String required    // login
+  password String required // a hashed password
+  status Boolean required  // default true, false means it's a disabled acount
+}
+// An exercice is about a language, for a level
+// duration was not asked, but can be usefull
+entity Exercice {
+  language Language required
+  level Level required
+  duration ZonedDateTime
+  content String required
+}
+// This one is an enum to avoid creating an entity, and request it
+enum Level {
+  JUNIOR, SENIOR
+}
+// This one is an enum to avoid creating an entity, and request it
+enum Language {
+  JAVA, PHP, JS, TS, RUBY, PYTHON, C
+}
+// These profilConstraints are used by the exercices generation algorithm ?
+// It's a black box for me :)
+enum ProfilConstraint {
+  CAN_DEVELOPE_WEB,
+  CAN_DEVELOPE_IOS,
+  CAN_DEVELOPE_ANDROID
+}
+// A test frame defined by a User with HR_ROLE
+// The duration is defined on the TestFrame for a genericity purpose
+// A test frame contains many exercices
+entity TestFrame {
+  title String required
+  description String required
+  duration ZonedDateTime required
+}
+// An instance of TestFrame, for a Candidate
+entity TestSession {
+  token String required
+  expirationDate ZonedDateTime required
+  startDate ZonedDateTime
+}
+// A result for a Candidate on an Exercice
+entity ExerciceSessionResult {
+  score Number
+}
+// An agregate for TestSessionResult
+entity TestSessionResult {
+  score Number
+}
+// A basic User Entity
+entity User {
+  username String
+  password String
+}
+// HR Role can define TestFrame, and view results
+// HR Role can define ProfilConstraint for a Candidate
+enum Role {
+  HR_ROLE
+}
+
+relationship OneToMany{
+  Candidate{profilConstraints} to ProfilConstraint
+}
+
+relationship OneToMany {
+  User{definedTests} to TestFrame,
+  User{roles} to Role
+}
+
+relationship OneToMany {
+   TestFrame{exercices} to Exercice
+}
+
+relationship OneToOne {
+	TestSession{candidate} to Candidate
+    TestSession{testFrame} to TestFrame    
+}
+
+relationship OneToOne {
+	ExerciceSessionResult{exercice} to Exercice,
+    ExerciceSessionResult{candidate} to Candidate
+}
+
+relationship OneToOne {
+  TestSessionResult{session} to TestSession
+}
+
+relationship OneToMany {
+  TestSessionResult{exerciceResults} to ExerciceSessionResult
+}
+
+// Set pagination options
+paginate User, TestFrame with infinite-scroll
+paginate Candidate, TestSession with pagination
+
+dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl
