@@ -7,33 +7,7 @@ class App extends Component {
     constructor() {
         super()
         this.state = {
-            students: [
-                {
-                    id: '1',
-                    lastname: 'Arya',
-                    firstname: 'Stark'
-                },
-                {
-                    id: '2',
-                    lastname: 'John',
-                    firstname: 'SNOW'
-                },
-                {
-                    id: '3',
-                    lastname: 'Jamie',
-                    firstname: 'Lannister'
-                },
-                {
-                    id: '4',
-                    lastname: 'Daenerys',
-                    firstname: 'Targaryen'
-                },
-                {
-                    id: '5',
-                    lastname: 'Cercei',
-                    firstname: 'Lannister'
-                }
-            ]
+            students: []
         }
     }
 
@@ -49,6 +23,17 @@ class App extends Component {
                 </div>
             </div>
         );
+    }
+
+    componentDidMount() {
+        fetch('http://localhost:1337/api/students')
+        .then(response => {
+            return response.json()
+        }).then(data => {
+            this.setState({students : data});
+        }).catch(rejection => {
+            console.log(rejection)
+        })
     }
 }
 
