@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
+import {StudentsList} from './components/StudentsList';
 
 class App extends Component {
     constructor() {
@@ -44,24 +45,7 @@ class App extends Component {
                     <h1 className="App-title">Students class</h1>
                 </header>
                 <div className="col-md-6">
-                    <table className="table">
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>FIRSTNAME</th>
-                            <th>LASTNAME</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {this.state.students.map(student =>
-                            <tr key={student.id}>
-                                <td>{student.id}</td>
-                                <td>{student.lastname}</td>
-                                <td>{student.firstname}</td>
-                            </tr>
-                        )}
-                        </tbody>
-                    </table>
+                    <StudentsList students = {this.state.students}/>
                 </div>
             </div>
         );
