@@ -2,9 +2,17 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 This project is a simple Monolithic App using React in front, and Node for serving JSON through REST endpoints.
 
-This project is build on the following classes diagram :
+It was build on the following classes diagram :
 
 ![Classes diagram](https://github.com/meyacine/developer_test/raw/master/jhipster-jdl-developer_test.png "Classes diagram")
+
+This project provides an express server running on the port 1337.
+
+To serve api, run the following command line :
+
+```
+$ yarn run server
+```
 
 Below you will find some information on how to perform common tasks.<br>
 You can find the most recent version of this guide [here](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md).
