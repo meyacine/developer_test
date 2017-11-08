@@ -35,7 +35,8 @@ class StudentsList extends Component {
     }
 
     handleEdit(student) {
-        this.props.handleEdit(student)
+        var studentClone = Object.assign({}, student);
+        this.props.handleEdit(studentClone)
     }
 }
 
