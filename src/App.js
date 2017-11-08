@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import StudentsList from "./components/students/StudentsList";
-import {StudentForm} from "./components/students/StudentForm";
+import StudentForm from "./components/students/StudentForm";
 
 class App extends Component {
     constructor() {
@@ -24,10 +24,10 @@ class App extends Component {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-6">
-                            <StudentsList students={this.state.students} editHandle={this.selectStudent.bind(this)}/>
+                            <StudentsList students={this.state.students} handleEdit={this.selectStudent.bind(this)}/>
                         </div>
                         <div className="col-md-6">
-                            <StudentForm student={this.state.currentStudent}/>
+                            <StudentForm student={this.state.currentStudent} handleSave={this.saveStudent.bind(this)} onInputChange={this.handleInputChange.bind(this)}/>
                         </div>
                     </div>
                 </div>
@@ -37,6 +37,14 @@ class App extends Component {
 
     selectStudent(student){
         this.setState({currentStudent : student})
+    }
+
+    handleInputChange (student) {
+        this.setState({currentStudent : student})
+    }
+
+    saveStudent(student){
+        console.log('save', student)
     }
 
     componentDidMount() {

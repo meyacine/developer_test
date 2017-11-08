@@ -1,11 +1,6 @@
 import React, {Component} from 'react';
 
 class StudentsList extends Component {
-    constructor(props) {
-        super(props)
-        this.editHandle = this.editHandle
-    }
-
     render() {
         return (
             <div className="table-responsive">
@@ -21,7 +16,7 @@ class StudentsList extends Component {
                     {this.props.students.map(student =>
                         <tr key={student.id}>
                             <td>
-                                <a onClick={this.editHandle.bind(this, student)} className="btn btn-primary">
+                                <a onClick={this.handleEdit.bind(this, student)} className="btn btn-primary">
                                     <i className="fa fa-pencil"></i>
                                 </a>
                                 <a className="btn btn-danger">
@@ -39,8 +34,8 @@ class StudentsList extends Component {
         );
     }
 
-    editHandle(student) {
-        this.props.editHandle(student)
+    handleEdit(student) {
+        this.props.handleEdit(student)
     }
 }
 
