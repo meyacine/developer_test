@@ -37,7 +37,7 @@ function create(req, res) {
     delete student.id;
     student.id = generateId();
     STUDENTS.push(student);
-    return res.status(200).json(student);7
+    return res.status(200).json(STUDENTS);7
 }
 
 function update(req, res) {
@@ -51,7 +51,7 @@ function update(req, res) {
         return res.status(404).json({error: 'The student with id "' + id + '" does not exist.'});
     }
     Object.assign(STUDENTS[index], student);
-    return res.status(200).json(STUDENTS[index]);
+    return res.status(200).json(STUDENTS);
 }
 
 function remove(req, res) {
