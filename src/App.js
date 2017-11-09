@@ -6,7 +6,6 @@ import {NotificationContainer, NotificationManager} from 'react-notifications';
 import StudentsService from "./services/students";
 
 
-const API = 'http://localhost:1337/api/students';
 class App extends Component {
     state = {
         students: [],
@@ -38,7 +37,8 @@ class App extends Component {
                                           handleDelete={this.handleDeleteStudent.bind(this)}/>
                         </div>
                         <div className="col-md-6">
-                            <StudentForm student={this.state.currentStudent} handleSave={this.handleSaveStudent.bind(this)}
+                            <StudentForm student={this.state.currentStudent}
+                                         handleSave={this.handleSaveStudent.bind(this)}
                                          onInputChange={this.handleInputChange.bind(this)}/>
                         </div>
                     </div>
@@ -48,7 +48,7 @@ class App extends Component {
     }
 
     componentDidMount() {
-        StudentsService.fetchAll().then(data=>{
+        StudentsService.fetchAll().then(data => {
             this.setState({students: data});
         })
     }
@@ -58,27 +58,18 @@ class App extends Component {
     }
 
     handleDeleteStudent(student) {
-        if (window.confirm('Are you sure? You want to delete '+ student.lastname +' ' + student.firstname)) {
-            const url = API + '/' + student.id
-            fetch(url, {
-                method: 'DELETE',
-                headers: {
-                    'Accept': '*/*',
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                return response.json()
-            }).then(data => {
+        if (window.confirm('Are you sure? You want to delete ' + student.lastname + ' ' + student.firstname)) {
+            StudentsService.delete(student).then(data => {
                 // we can handle response.ok on the promise
                 if (data.error) {
                     NotificationManager.error(data.error);
                     throw new Error(data.error)
-
                 }
                 NotificationManager.success('Student deleted with success');
-                this.setState({students: data});
                 this.resetForm();
+                this.setState({
+                    students: data
+                })
             }).catch(rejection => {
                 console.log(rejection)
             })
@@ -105,32 +96,17 @@ class App extends Component {
     }
 
     handleSaveStudent(student) {
-        let urlComplement = student.id ? '/' + student.id : ''
-        let methode = 'POST'
-        if (student.id) {
-            methode = 'put'
-        }
-        const url = API + urlComplement
-        fetch(url, {
-            method: methode,
-            headers: {
-                'Accept': '*/*',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(student)
-        })
-        .then(response => {
-            return response.json()
-        }).then(data => {
+        StudentsService.save(student).then(data => {
             // we can handle response.ok on the promise
             if (data.error) {
                 NotificationManager.error(data.error);
                 throw new Error(data.error)
-
             }
             NotificationManager.success('Student saved with success');
-            this.setState({students: data});
             this.resetForm();
+            this.setState({
+                students: data
+            })
         }).catch(rejection => {
             console.log(rejection)
         })
