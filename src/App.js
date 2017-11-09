@@ -3,20 +3,17 @@ import './App.css';
 import StudentsList from "./components/students/StudentsList";
 import StudentForm from "./components/students/StudentForm";
 import {NotificationContainer, NotificationManager} from 'react-notifications';
+import StudentsService from "./services/students";
 
 
 const API = 'http://localhost:1337/api/students';
 class App extends Component {
-
-    constructor() {
-        super()
-        this.state = {
-            students: [],
-            currentStudent: {
-                id: null,
-                firstname: '',
-                lastname: ''
-            }
+    state = {
+        students: [],
+        currentStudent: {
+            id: null,
+            firstname: '',
+            lastname: ''
         }
     }
 
@@ -51,13 +48,8 @@ class App extends Component {
     }
 
     componentDidMount() {
-        fetch(API)
-            .then(response => {
-                return response.json()
-            }).then(data => {
+        StudentsService.fetchAll().then(data=>{
             this.setState({students: data});
-        }).catch(rejection => {
-            console.log(rejection)
         })
     }
 
