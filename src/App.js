@@ -36,7 +36,9 @@ class App extends Component {
                                     </button>
                                 </div>
                             </div>
-                            <StudentsList students={this.state.students} handleEdit={this.selectStudent.bind(this)}/>
+                            <StudentsList students={this.state.students}
+                                          handleEdit={this.selectStudent.bind(this)}
+                                          handleDelete={this.deleteStudent.bind(this)}/>
                         </div>
                         <div className="col-md-6">
                             <StudentForm student={this.state.currentStudent} handleSave={this.saveStudent.bind(this)}
@@ -51,6 +53,35 @@ class App extends Component {
     selectStudent(student) {
         this.setState({currentStudent: student})
     }
+
+    deleteStudent(student) {
+        if (window.confirm('Are you sure? You want to delete '+ student.lastname +' ' + student.firstname)) {
+            const url = API + '/' + student.id
+            fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': '*/*',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                return response.json()
+            }).then(data => {
+                // we can handle response.ok on the promise
+                if (data.error) {
+                    NotificationManager.error(data.error);
+                    throw new Error(data.error)
+
+                }
+                NotificationManager.success('Student deleted with success');
+                this.setState({students: data});
+                this.resetForm();
+            }).catch(rejection => {
+                console.log(rejection)
+            })
+        }
+    }
+
 
     handleNewStudent() {
         this.resetForm();
@@ -94,6 +125,7 @@ class App extends Component {
                 throw new Error(data.error)
 
             }
+            NotificationManager.success('Student saved with success');
             this.setState({students: data});
             this.resetForm();
         }).catch(rejection => {

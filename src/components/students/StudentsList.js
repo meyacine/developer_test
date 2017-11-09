@@ -19,7 +19,7 @@ class StudentsList extends Component {
                                 <a onClick={this.handleEdit.bind(this, student)} className="btn btn-primary">
                                     <i className="fa fa-pencil"></i>
                                 </a>
-                                <a className="btn btn-danger">
+                                <a onClick={this.handleDelete.bind(this, student)} className="btn btn-danger">
                                     <i className="fa fa-trash"></i>
                                 </a>
 
@@ -37,6 +37,10 @@ class StudentsList extends Component {
     handleEdit(student) {
         var studentClone = Object.assign({}, student);
         this.props.handleEdit(studentClone)
+    }
+
+    handleDelete(student) {
+        this.props.handleDelete(student)
     }
 }
 
