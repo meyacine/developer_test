@@ -37,11 +37,11 @@ class App extends Component {
                                 </div>
                             </div>
                             <StudentsList students={this.state.students}
-                                          handleEdit={this.selectStudent.bind(this)}
-                                          handleDelete={this.deleteStudent.bind(this)}/>
+                                          handleEdit={this.handleSelectStudent.bind(this)}
+                                          handleDelete={this.handleDeleteStudent.bind(this)}/>
                         </div>
                         <div className="col-md-6">
-                            <StudentForm student={this.state.currentStudent} handleSave={this.saveStudent.bind(this)}
+                            <StudentForm student={this.state.currentStudent} handleSave={this.handleSaveStudent.bind(this)}
                                          onInputChange={this.handleInputChange.bind(this)}/>
                         </div>
                     </div>
@@ -50,11 +50,22 @@ class App extends Component {
         );
     }
 
-    selectStudent(student) {
+    componentDidMount() {
+        fetch(API)
+            .then(response => {
+                return response.json()
+            }).then(data => {
+            this.setState({students: data});
+        }).catch(rejection => {
+            console.log(rejection)
+        })
+    }
+
+    handleSelectStudent(student) {
         this.setState({currentStudent: student})
     }
 
-    deleteStudent(student) {
+    handleDeleteStudent(student) {
         if (window.confirm('Are you sure? You want to delete '+ student.lastname +' ' + student.firstname)) {
             const url = API + '/' + student.id
             fetch(url, {
@@ -101,7 +112,7 @@ class App extends Component {
         this.setState({currentStudent: student})
     }
 
-    saveStudent(student) {
+    handleSaveStudent(student) {
         let urlComplement = student.id ? '/' + student.id : ''
         let methode = 'POST'
         if (student.id) {
@@ -128,17 +139,6 @@ class App extends Component {
             NotificationManager.success('Student saved with success');
             this.setState({students: data});
             this.resetForm();
-        }).catch(rejection => {
-            console.log(rejection)
-        })
-    }
-
-    componentDidMount() {
-        fetch(API)
-        .then(response => {
-            return response.json()
-        }).then(data => {
-            this.setState({students: data});
         }).catch(rejection => {
             console.log(rejection)
         })
