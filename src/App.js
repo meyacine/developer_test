@@ -14,7 +14,6 @@ class App extends Component {
                 lastname: ''
             }
         }
-        this.selectStudent = this.selectStudent
     }
 
     render() {
@@ -24,6 +23,14 @@ class App extends Component {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-6">
+                            <div className="row">
+                                <div className="col-md-12">
+                                    <button className="btn btn-primary pull-right"
+                                            onClick={this.handleNewStudent.bind(this)}>
+                                        <i className="fa fa-plus"></i> Add a new
+                                    </button>
+                                </div>
+                            </div>
                             <StudentsList students={this.state.students} handleEdit={this.selectStudent.bind(this)}/>
                         </div>
                         <div className="col-md-6">
@@ -38,6 +45,20 @@ class App extends Component {
 
     selectStudent(student) {
         this.setState({currentStudent: student})
+    }
+
+    handleNewStudent() {
+        this.resetForm();
+    }
+
+    resetForm() {
+        this.setState({
+            currentStudent: {
+                id: null,
+                firstname: '',
+                lastname: ''
+            }
+        })
     }
 
     handleInputChange(student) {
@@ -62,7 +83,12 @@ class App extends Component {
         .then(response => {
             return response.json()
         }).then(data => {
+            // we can handle response.ok on the promise
+            if (data.error) {
+                throw new Error(data.error)
+            }
             this.setState({students: data});
+            this.resetForm();
         }).catch(rejection => {
             console.log(rejection)
         })
@@ -70,9 +96,9 @@ class App extends Component {
 
     componentDidMount() {
         fetch(API)
-            .then(response => {
-                return response.json()
-            }).then(data => {
+        .then(response => {
+            return response.json()
+        }).then(data => {
             this.setState({students: data});
         }).catch(rejection => {
             console.log(rejection)
