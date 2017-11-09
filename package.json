@@ -9,6 +9,7 @@
     "font-awesome": "^4.7.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
+    "react-notifications": "^1.4.3",
     "react-scripts": "1.0.17",
     "underscore": "^1.8.3"
   },

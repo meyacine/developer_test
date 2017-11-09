@@ -2,8 +2,12 @@ import React, {Component} from 'react';
 import './App.css';
 import StudentsList from "./components/students/StudentsList";
 import StudentForm from "./components/students/StudentForm";
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+
+
 const API = 'http://localhost:1337/api/students';
 class App extends Component {
+
     constructor() {
         super()
         this.state = {
@@ -19,6 +23,7 @@ class App extends Component {
     render() {
         return (
             <div className="App">
+                <NotificationContainer/>
                 <h1 className="App-title">Students class</h1>
                 <div className="container">
                     <div className="row">
@@ -85,7 +90,9 @@ class App extends Component {
         }).then(data => {
             // we can handle response.ok on the promise
             if (data.error) {
+                NotificationManager.error(data.error);
                 throw new Error(data.error)
+
             }
             this.setState({students: data});
             this.resetForm();
